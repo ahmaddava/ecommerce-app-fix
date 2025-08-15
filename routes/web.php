@@ -72,6 +72,7 @@ Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::get('/payment/{order}', [CheckoutController::class, 'showPayment'])->name('payment.show');
+    Route::post('/payment/{order}/upload', [CheckoutController::class, 'uploadPaymentProof'])->name('payment.upload');
     Route::get('/order-success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 
@@ -84,9 +85,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [AdminOrderController::class, 'index'])->name('index');
+        Route::get('/pending-verification', [AdminOrderController::class, 'pendingVerification'])->name('pending.verification');
         Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
         Route::put('/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('update.status');
         Route::put('/{order}/payment-status', [AdminOrderController::class, 'updatePaymentStatus'])->name('update.payment.status');
+        Route::post('/{order}/verify-payment', [AdminOrderController::class, 'verifyPayment'])->name('verify.payment');
     });
 
     Route::prefix('messages')->name('messages.')->group(function () {

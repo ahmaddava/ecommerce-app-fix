@@ -16,13 +16,13 @@
 
         <div class="row">
             <div class="col-md-8">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-geo-alt"></i> Informasi Pengiriman</h5>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('checkout.process') }}" method="POST">
-                            @csrf
+                <form action="{{ route('checkout.process') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="bi bi-geo-alt"></i> Informasi Pengiriman</h5>
+                        </div>
+                        <div class="card-body">
                             <div class="mb-3">
                                 <label for="address" class="form-label">Alamat Lengkap <span
                                         class="text-danger">*</span></label>
@@ -63,48 +63,77 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="card shadow-sm mb-4">
-                                <div class="card-header bg-success text-white">
-                                    <h5 class="mb-0"><i class="bi bi-wallet2"></i> Metode Pembayaran</h5>
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="bi bi-wallet2"></i> Metode Pembayaran</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input payment-method-radio" type="radio" name="payment_method"
+                                    id="paymentBNI" value="bni"
+                                    {{ old('payment_method') == 'bni' ? 'checked' : '' }} required>
+                                <label class="form-check-label" for="paymentBNI">
+                                    <img src="{{ asset('images/bni.png') }}" alt="BNI" height="25"
+                                        class="me-2"> Bank Transfer BNI
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input payment-method-radio" type="radio" name="payment_method"
+                                    id="paymentBCA" value="bca"
+                                    {{ old('payment_method') == 'bca' ? 'checked' : '' }} required>
+                                <label class="form-check-label" for="paymentBCA">
+                                    <img src="{{ asset('images/bca.png') }}" alt="BCA" height="25"
+                                        class="me-2"> Bank Transfer BCA
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input payment-method-radio" type="radio" name="payment_method"
+                                    id="paymentQRIS" value="qris"
+                                    {{ old('payment_method') == 'qris' ? 'checked' : '' }} required>
+                                <label class="form-check-label" for="paymentQRIS">
+                                    <img src="{{ asset('images/qris.png') }}" alt="QRIS" height="25"
+                                        class="me-2"> QRIS
+                                </label>
+                            </div>
+                            
+                            @error('payment_method')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
+
+                            <div id="bni-details" class="mt-3" style="display: none;">
+                                <div class="alert alert-info">
+                                    <h6 class="alert-heading">Silakan Transfer ke Rekening BNI:</h6>
+                                    <p class="mb-0"><strong>Nomor Rekening:</strong> 1234567890</p>
+                                    <p class="mb-0"><strong>Atas Nama:</strong> PT. Unik Koleksi Indonesia</p>
                                 </div>
-                                <div class="card-body">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="payment_method" id="paymentBNI"
-                                            value="bni" {{ old('payment_method') == 'bni' ? 'checked' : '' }} required>
-                                        <label class="form-check-label" for="paymentBNI">
-                                            <img src="{{ asset('images/bni.png') }}" alt="BNI" height="25"
-                                                class="me-2"> Bank Transfer BNI
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="payment_method"
-                                            id="paymentQRIS" value="qris"
-                                            {{ old('payment_method') == 'qris' ? 'checked' : '' }} required>
-                                        <label class="form-check-label" for="paymentQRIS">
-                                            <img src="{{ asset('images/qris.png') }}" alt="QRIS" height="25"
-                                                class="me-2"> QRIS
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="payment_method" id="paymentBCA"
-                                            value="bca" {{ old('payment_method') == 'bca' ? 'checked' : '' }} required>
-                                        <label class="form-check-label" for="paymentBCA">
-                                            <img src="{{ asset('images/bca.png') }}" alt="BCA" height="25"
-                                                class="me-2"> Bank Transfer BCA
-                                        </label>
-                                    </div>
-                                    @error('payment_method')
-                                        <div class="text-danger mt-2">{{ $message }}</div>
-                                    @enderror
+                            </div>
+                            
+                            <div id="bca-details" class="mt-3" style="display: none;">
+                                <div class="alert alert-primary">
+                                    <h6 class="alert-heading">Silakan Transfer ke Rekening BCA:</h6>
+                                    <p class="mb-0"><strong>Nomor Rekening:</strong> 0987654321</p>
+                                    <p class="mb-0"><strong>Atas Nama:</strong> PT. Unik Koleksi Indonesia</p>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-lg w-100"><i
-                                    class="bi bi-check-circle"></i> Proses Pesanan</button>
-                        </form>
+                            <div id="payment-proof-upload" class="mt-3" style="display: none;">
+                                <label for="payment_proof" class="form-label fw-bold">Upload Bukti Pembayaran <span class="text-danger">*</span></label>
+                                <input class="form-control @error('payment_proof') is-invalid @enderror" type="file" id="payment_proof" name="payment_proof" accept="image/*">
+                                @error('payment_proof')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100"><i
+                            class="bi bi-check-circle"></i> Proses Pesanan</button>
+                </form>
             </div>
 
             <div class="col-md-4">
@@ -146,3 +175,45 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil semua elemen yang kita butuhkan
+        const paymentRadios = document.querySelectorAll('.payment-method-radio');
+        const bniDetails = document.getElementById('bni-details');
+        const bcaDetails = document.getElementById('bca-details');
+        const uploadContainer = document.getElementById('payment-proof-upload');
+        const fileInput = document.getElementById('payment_proof');
+
+        // Fungsi untuk menampilkan/menyembunyikan elemen berdasarkan pilihan
+        function togglePaymentDetails() {
+            const selectedValue = document.querySelector('input[name="payment_method"]:checked')?.value;
+
+            // Sembunyikan semua detail terlebih dahulu
+            bniDetails.style.display = 'none';
+            bcaDetails.style.display = 'none';
+            uploadContainer.style.display = 'none';
+            fileInput.required = false; // Jadikan tidak wajib
+
+            if (selectedValue === 'bni') {
+                bniDetails.style.display = 'block';
+                uploadContainer.style.display = 'block';
+                fileInput.required = true; // Wajibkan upload bukti
+            } else if (selectedValue === 'bca') {
+                bcaDetails.style.display = 'block';
+                uploadContainer.style.display = 'block';
+                fileInput.required = true; // Wajibkan upload bukti
+            }
+        }
+
+        // Tambahkan event listener untuk setiap radio button
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', togglePaymentDetails);
+        });
+
+        // Panggil fungsi saat halaman pertama kali dimuat, untuk menangani jika ada 'old' value
+        togglePaymentDetails();
+    });
+</script>
+@endpush

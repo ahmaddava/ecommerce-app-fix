@@ -18,6 +18,10 @@ class Order extends Model
         'payment_status',
         'payment_method',
         'payment_reference',
+        'payment_proof',
+        'admin_notes',
+        'payment_verified_at',
+        'verified_by',
         'shipping_address',
         'customer_name',
         'customer_phone',
@@ -31,7 +35,8 @@ class Order extends Model
         'total_amount' => 'decimal:2',
         'shipping_cost' => 'decimal:2',
         'shipped_at' => 'datetime',
-        'delivered_at' => 'datetime'
+        'delivered_at' => 'datetime',
+        'payment_verified_at' => 'datetime'
     ];
 
     // Relationship with user
@@ -44,6 +49,12 @@ class Order extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    // Relationship with verifier (admin who verified payment)
+    public function verifier()
+    {
+        return $this->belongsTo(User::class, 'verified_by');
     }
 
     // Generate order number

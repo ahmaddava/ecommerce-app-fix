@@ -382,5 +382,24 @@
                 form.submit();
             }
         }
+
+        // ======================================================================
+        // SOLUSI UNTUK DROPDOWN TERPOTONG DI DALAM TABLE-RESPONSIVE
+        // ======================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableResponsive = document.querySelector('.table-responsive');
+
+            if (tableResponsive) {
+                // Saat dropdown akan ditampilkan
+                tableResponsive.addEventListener('show.bs.dropdown', function() {
+                    tableResponsive.style.overflow = 'visible';
+                });
+
+                // Saat dropdown sudah ditutup
+                tableResponsive.addEventListener('hide.bs.dropdown', function() {
+                    tableResponsive.style.overflow = 'auto';
+                });
+            }
+        });
     </script>
 @endpush
